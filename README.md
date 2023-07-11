@@ -4,7 +4,7 @@
 
 In this guide, we will utilize signature-based minting of NFTs to create a "community-built" NFT collection, where each user mints and owns their own NFT based on specific conditions that we provide.
 
-By the end, we'll have an NFT collection of NFTs that are all animal names, as specified in the [animalNames.ts](./animalNames.ts) file.
+By the end, we'll have an NFT collection of NFTs that are all animal names, as specified in the [reedemCodes.ts](./reedemCodes.ts) file.
 
 **Check out the Demo here**: https://signature-based-minting.thirdweb-example.com/
 
@@ -44,7 +44,7 @@ Signature-based minting allows you to specify exactly what NFTs you allow to be 
 
 In this guide, we'll grant users signatures to mint NFTs into our collection that follow the format we expect.
 
-In the end, we'll have a community-made collection that only contains NFTs with animal names, by restricting the signatures we provide to only allow NFTs with one of our [animal names](./animalNames.ts)!
+In the end, we'll have a community-made collection that only contains NFTs with animal names, by restricting the signatures we provide to only allow NFTs with one of our [animal names](./reedemCodes.ts)!
 
 Let's get into it!
 
@@ -183,7 +183,7 @@ const nftCollection = sdk.getNFTCollection(
 **Example Check #1 - Is the name of the NFT an animal name?**
 
 ```tsx
-if (!animalNames.includes(nftName?.toLowerCase())) {
+if (!reedemCodes.includes(nftName?.toLowerCase())) {
   res.status(400).json({ error: "That's not one of the animals we know!" });
   return;
 }

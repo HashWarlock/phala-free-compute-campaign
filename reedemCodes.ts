@@ -1,4 +1,4 @@
-const animalNames = [
+const reedemCodes = [
   "ant",
   "bear",
   "bee",
@@ -64,4 +64,4 @@ const animalNames = [
   "peacock",
 ];
 
-export default animalNames;
+export default reedemCodes;

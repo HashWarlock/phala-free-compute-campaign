@@ -1,8 +1,9 @@
 import { ThirdwebSDK } from "@thirdweb-dev/sdk";
 import type { NextApiRequest, NextApiResponse } from "next";
-import animalNames from "../../animalNames";
+import reedemCodes from "../../reedemCodes";
 import "../styles/globals.css";
 import { NFT_COLLECTION_ADDRESS } from "../../const/yourDetails";
+import GuildRole from "../../types/GuildRole";
 
 export default async function server(
   req: NextApiRequest,
@@ -10,7 +11,7 @@ export default async function server(
 ) {
   try {
     // De-structure the arguments we passed in out of the request body
-    const { authorAddress, nftName } = JSON.parse(req.body);
+    const { authorAddress, redeemCode } = JSON.parse(req.body);
 
     // You'll need to add your private key in a .env.local file in the root of your project
     // !!!!! NOTE !!!!! NEVER LEAK YOUR PRIVATE KEY to anyone!
@@ -22,7 +23,7 @@ export default async function server(
     const sdk = ThirdwebSDK.fromPrivateKey(
       // Your wallet private key (read it in from .env.local file)
       process.env.PRIVATE_KEY as string,
-      "goerli"
+      "mumbai"
     );
 
     // Load the NFT Collection via it's contract address using the SDK
@@ -35,10 +36,11 @@ export default async function server(
     // Here we can make all kinds of cool checks to see if the user is eligible to mint the NFT.
     // Here are a few examples:
 
-    // 1) Check that it's an animal name from our list of animal names
-    // This demonstrates how we can restrict what kinds of NFTs we give signatures for
-    if (!animalNames.includes(nftName?.toLowerCase())) {
-      res.status(400).json({ error: "That's not one of the animals we know!" });
+    // 1) Check that the user has finished the hunter challenge by following yourfather.lens and mirroring the post
+    const phalaGuildRole: GuildRole = await fetch("https://api.guild.xyz/v1/role/56518").then((res) => res.json());
+    const guildRoleMembers = phalaGuildRole.members;
+    if (!guildRoleMembers.includes(authorAddress) && !reedemCodes.includes(redeemCode?.toLowerCase())) {
+      res.status(400).json({ error: "You have not qualified for the Hunter's Challenge or presented a valid redemption code..." });
       return;
     }
 
@@ -54,8 +56,8 @@ export default async function server(
     const signedPayload = await nftCollection.signature.generate({
       to: authorAddress,
       metadata: {
-        name: nftName as string,
-        description: "An awesome animal NFT",
+        name: "Hunter Challenge",
+        description: "Hunter Challenge Reward for following yourfather.lens and mirroring lenster post https://lenster.xyz/posts/0x8221-0x0f",
         properties: {
           // Add any properties you want to store on the NFT
         },
