@@ -40,7 +40,7 @@ export default async function server(
     const phalaGuildRole: GuildRole = await fetch("https://api.guild.xyz/v1/role/56518").then((res) => res.json());
     const guildRoleMembers = phalaGuildRole.members;
 
-    if (!guildRoleMembers.includes(authorAddress) && !redeemCodes.includes(redeemCode?.toLowerCase())) {
+    if (!guildRoleMembers.includes(authorAddress.toLowerCase()) && !redeemCodes.includes(redeemCode?.toLowerCase())) {
       res.status(400).json({ error: "You have not qualified for the Hunter's Challenge or presented a valid redemption code..." });
       return;
     }
