@@ -1,4 +1,4 @@
-const reedemCodes = [
+const redeemCodes = [
   "ant",
   "bear",
   "bee",
@@ -64,4 +64,4 @@ const reedemCodes = [
   "peacock",
 ];
 
-export default reedemCodes;
+export default redeemCodes;

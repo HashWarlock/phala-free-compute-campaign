@@ -11,13 +11,13 @@ function MyApp({ Component, pageProps }: AppProps) {
   return (
     <ThirdwebProvider activeChain={activeChain}>
       <Head>
-        <title>thirdweb Signature Based Minting</title>
+        <title>Phala Free Compute NFT Minting</title>
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <meta
           name="description"
-          content="thirdweb Example Repository to Showcase signature based minting on an NFT Collection contract"
+          content="Welcome Hunter Challenge participants and Polygon developers!"
         />
-        <meta name="keywords" content="thirdweb signature based minting" />
+        <meta name="keywords" content="Phala free compute campaign" />
       </Head>
       <Component {...pageProps} />
       <ThirdwebGuideFooter />

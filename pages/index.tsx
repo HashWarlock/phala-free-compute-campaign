@@ -1,6 +1,6 @@
 import styles from "./styles/Home.module.css";
 import {
-  ThirdwebNftMedia,
+  ConnectWallet,
   useAddress,
   useContract,
   useNFTs,
@@ -12,20 +12,23 @@ import { NFT_COLLECTION_ADDRESS } from '../const/yourDetails';
 
 const Home: NextPage = () => {
   const address = useAddress();
+  console.log(`${address} connected`);
 
   // Fetch the NFT collection from thirdweb via it's contract address.
   const { contract: nftCollection } = useContract(
     NFT_COLLECTION_ADDRESS,
     "nft-collection"
   );
+  console.log(`nftCollection part`);
 
 
   // Load all the minted NFTs in the collection
   const { data: nfts, isLoading: loadingNfts } = useNFTs(nftCollection);
 
+  console.log(`nftCollection part2`);
   // Here we store the user inputs for their NFT.
   const [nftName, setNftName] = useState<string>("");
-
+  console.log(`nftCollection part3`);
   // This function calls a Next JS API route that mints an NFT with signature-based minting.
   // We send in the address of the current user, and the text they entered as part of the request.
   const mintWithSignature = async () => {
@@ -35,9 +38,10 @@ const Home: NextPage = () => {
         method: "POST",
         body: JSON.stringify({
           authorAddress: address, // Address of the current user
-          nftName: nftName || "",
+          redeemCode: nftName || "",
         }),
       });
+      console.log("hello")
 
       // Grab the JSON from the response
       const json = await signedPayloadReq.json();
@@ -49,6 +53,7 @@ const Home: NextPage = () => {
       // If the request succeeded, we'll get the signed payload from the response.
       // The API should come back with a JSON object containing a field called signedPayload.
       // This line of code will parse the response and store it in a variable called signedPayload.
+      // TODO: WTF this is wrong
       const signedPayload = json.signedPayload;
 
       // Now we can call signature.mint and pass in the signed payload that we received from the server.
@@ -65,38 +70,37 @@ const Home: NextPage = () => {
 
   return (
     <div className={styles.container}>
-      <h1 className={styles.h1}>Signature-Based Minting</h1>
+      <h1 className={styles.h1}>Phala Free Compute Campaign</h1>
       <p className={styles.explain}>
-        Signature-based minting with{" "}
+        Free compute campaign with{" "}
         <b>
           {" "}
           <a
-            href="https://thirdweb.com/"
+            href="https://phala.network/"
             target="_blank"
             rel="noopener noreferrer"
             className={styles.purple}
           >
-            thirdweb
+            Phala Network
           </a>
         </b>{" "}
-        + Next.JS to create a community-made NFT collection with restrictions.
       </p>
 
       <p>
-        Hint: We only generate signatures if your NFT name is a cool{" "}
-        <b>animal name</b>! 😉
+        <i>Hint</i>: We only generate signatures if you have finished the Hunter Challenge or have a valid
+        <b> redeem code</b>! 😉
       </p>
 
       <hr className={styles.divider} />
 
       <div className={styles.collectionContainer}>
         <h2 className={styles.ourCollection}>
-          Mint your own NFT into the collection:
+          Claim your free compute NFT:
         </h2>
 
         <input
           type="text"
-          placeholder="Name of your NFT"
+          placeholder="Redeem Code"
           className={styles.textInput}
           maxLength={26}
           onChange={(e) => setNftName(e.target.value)}
@@ -105,7 +109,7 @@ const Home: NextPage = () => {
 
       <div style={{ marginTop: 24 }}>
         <Web3Button
-          contractAddress={process.env.NEXT_PUBLIC_NFT_COLLECTION_ADDRESS!}
+          contractAddress={NFT_COLLECTION_ADDRESS}
           action={() => mintWithSignature()}
         >
           Mint NFT
